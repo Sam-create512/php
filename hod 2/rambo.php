@@ -14,8 +14,7 @@ $pole = [
         ];
 // print_r($pole);
 
-foreach($pole as $value){
-    echo $value;
+foreach($pole as $key => $value){
 }
 }
 ?>
