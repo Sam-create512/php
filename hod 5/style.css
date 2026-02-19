@@ -1,0 +1,29 @@
+
+*{
+    padding:0px
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+form{
+    margin-top: 100px;
+    display: flex;
+    width: 600px;
+    flex-direction: column;
+    
+}
+.textarea_div{
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+}
+textarea{
+    resize: none;
+    height: 200px;
+}
+
+ 
+    
