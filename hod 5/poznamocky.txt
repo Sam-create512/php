@@ -1,0 +1,13 @@
+json_encode($registracne_udaje) - "premeni pole na text";
+json_decode(file_get_contents($file), true) ->
+file_get_contents($file) - prečíta celý súbor ako text;
+json_decode(..., true) - zmení text na asociatívne pole;
+json musí byť uložený vo formáte: 
+[
+    {"nazov":"hodnota","dalsia_premenna":"hodnota"},
+    {"nazov":"hodnota","dalsia_premenna":"hodnota"},
+    {"nazov":"hodnota","dalsia_premenna":"hodnota"}
+]
+-> pokiaľ chcem pridať nový záznam, musím celé pole prečítať a znova zapísať;
+
+if (!is_array($data)) $data = []; → if the file is empty or corrupted, this ensures $data is always an array, so we can append safely.

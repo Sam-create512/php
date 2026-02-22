@@ -1,3 +1,27 @@
-a|a|aaaaaaaaaaaaaaaaaaaaaaaaaaaa
-b|b|bbbbbbbbbbbbbbbbbbbbbbbbb
-c|cisco|cccccccccccccccccccccccc*/+*-/+*/+*-/+cccccc
+[
+    {
+        "nazov": "zaznam",
+        "heslo": "a",
+        "zaznam": "aaaa"
+    },
+    {
+        "nazov": "a",
+        "heslo": "a",
+        "zaznam": "aaaaa"
+    },
+    {
+        "nazov": "b",
+        "heslo": "b",
+        "zaznam": "bbbbbbbb"
+    },
+    {
+        "nazov": "A",
+        "heslo": "a",
+        "zaznam": "aaaa"
+    },
+    {
+        "nazov": "Z\u00e1znam \u010d.1",
+        "heslo": "a",
+        "zaznam": "aaaa"
+    }
+]
