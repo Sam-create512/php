@@ -1,27 +1,32 @@
 [
     {
-        "nazov": "zaznam",
-        "heslo": "a",
-        "zaznam": "aaaa"
-    },
-    {
-        "nazov": "a",
-        "heslo": "a",
-        "zaznam": "aaaaa"
-    },
-    {
-        "nazov": "b",
-        "heslo": "b",
-        "zaznam": "bbbbbbbb"
-    },
-    {
-        "nazov": "A",
-        "heslo": "a",
-        "zaznam": "aaaa"
-    },
-    {
+        "id": 0,
         "nazov": "Z\u00e1znam \u010d.1",
+        "heslo": "cisco",
+        "zaznam": "Toto je zaznam"
+    },
+    {
+        "id": 1,
+        "nazov": "Z\u00e1znam \u010d.2",
+        "heslo": "password",
+        "zaznam": "Toto je zaznam"
+    },
+    {
+        "id": 2,
+        "nazov": "Z\u00e1znam \u010d.3",
+        "heslo": "heslo",
+        "zaznam": "Toto je zaznam"
+    },
+    {
+        "id": 3,
+        "nazov": "Z\u00e1znam \u010d.4",
         "heslo": "a",
-        "zaznam": "aaaa"
+        "zaznam": "a"
+    },
+    {
+        "id": 4,
+        "nazov": "Z\u00e1znam \u010d.5",
+        "heslo": "heslo",
+        "zaznam": "haloooo"
     }
 ]

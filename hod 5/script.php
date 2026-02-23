@@ -30,9 +30,19 @@
             }
     /* */
 
+    /* Vytvorenie ID na zaklade predosleho ID */
+        if ($data === []){
+            $id = 0;
+        }
+        else{
+            $id_p = end($data);
+            $id = $id_p["id"] + 1;
+        }
+    /* */
+
     /* Overenie spravnosti hesla */
         if($_POST["heslo_zaznamu"] === $_POST["heslo_zaznamu2"]){
-            $registracne_udaje = ["nazov" => $_POST["nazov_zaznamu"], "heslo" => $_POST["heslo_zaznamu"] , "zaznam" => $_POST["textarea_zaznam"]];
+            $registracne_udaje = ["id" => $id, "nazov" => $_POST["nazov_zaznamu"], "heslo" => $_POST["heslo_zaznamu"] , "zaznam" => $_POST["textarea_zaznam"]];
             $data[] = $registracne_udaje;
         }
         else{
@@ -43,8 +53,10 @@
 
     /* Zapis do suboru */
         file_put_contents($subor,json_encode($data,JSON_PRETTY_PRINT));
-        header("Location:create.php");
-        exit();
+        
+        echo($id);
+        /*header("Location:home.php");print_r($id_p);
+        exit();*/
     /* */
     }
 ?>
