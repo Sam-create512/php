@@ -1,12 +1,10 @@
 *{
     padding:0px
 }
-body{
-
-}
 
 header{
     padding: 10px;
+
 }
 
 .container{
@@ -14,7 +12,16 @@ header{
     margin-top: 100px;
     
 }
-.zaznam{
-    background-color: red;
+textarea{
+    resize: none;
+    height: 200px;
 
 }
+
+.cont{
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+    
+}
+

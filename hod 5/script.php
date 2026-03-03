@@ -54,9 +54,8 @@
     /* Zapis do suboru */
         file_put_contents($subor,json_encode($data,JSON_PRETTY_PRINT));
         
-        echo($id);
-        /*header("Location:home.php");print_r($id_p);
-        exit();*/
+        header("Location:home.php");
+        exit();
     /* */
     }
 ?>
