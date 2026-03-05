@@ -28,5 +28,11 @@
         "nazov": "Z\u00e1znam \u010d.5",
         "heslo": "heslo",
         "zaznam": "haloooo"
+    },
+    {
+        "id": 5,
+        "nazov": "jozov zaznam",
+        "heslo": "cisco",
+        "zaznam": ":)"
     }
 ]
