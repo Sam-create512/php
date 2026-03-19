@@ -6,27 +6,67 @@ include "Database.php";
 $spojenie = new Database();
 $db = $spojenie->nadviazSpojenie();
 
-
+print_r($_POST);
 if(!$db){
     die(" Databaza nie je pripojena");
 }
+if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"])){
 
+    if($_POST["action"] === "delete"){
 
-$sql = "SELECT * FROM knihy";
-$stmt = $db->query($sql);
-
-if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"] && $_POST["action"] === "delete")){
+    
     $sql = "DELETE FROM knihy WHERE id = :id";
 
     $stmt = $db->prepare($sql);
 
-    return $stmt->execute([
+    $stmt->execute([
         ":id" => $_POST["kniha_id"]
     ]);
 
     header("Location:index.php");
     exit();
+    }
+    elseif($_POST["action"] === "create"){
+        $sql = "INSERT INTO knihy(nazov,autor,rok_vydania,stav) VALUES(:nazov,:autor,:rok_vydania,:stav)";
+        $stmt = $db->prepare($sql);
+
+
+        // $stmt = $db->prepare($sql);
+        // var_dump($stmt);
+        $stmt->execute([
+             ":nazov" => $_POST["nazov"],
+             ":autor" => $_POST["autor"],
+             ":rok_vydania" => $_POST["rok_vydania"],
+             ":stav" => $_POST["stav"]
+            ]);
+    
+        header("Location:index.php");
+        exit();        
+    }
+    // elseif($_POST["action"] === "update"){
+    //     header("Location:update.php");
+    //     exit(); 
+    // }
+    if($_POST["action"] === "update"){
+        $sql = "UPDATE knihy SET nazov=:nazov,autor=:autor,rok_vydania=:rok_vydania,stav=:stav WHERE id=:id";
+
+        $stmt = $db->prepare($sql);
+    
+        $stmt->execute([
+            "nazov" => $_POST["nazov"],
+            "autor" => $_POST["autor"],
+            "rok_vydania" => $_POST["rok_vydania"],
+            "stav" => $_POST["stav"],
+            ":id" => $_POST["kniha_id"]
+
+        ]);        
+    }
 }
+
+$sql = "SELECT * FROM knihy";
+$stmt = $db->query($sql);
+
+
 
 
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
@@ -52,6 +92,29 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 </head>
 <body>
     <h1>Kniznica</h1>
+    <br>                   
+        <form action="index.php" method="POST">
+
+            <label for="nazov">Nazov</label>
+            <input type="text" name="nazov">
+
+            <label for="autor">Autor</label>
+            <input type="text" name="autor">
+
+            <label for="rok_vydania">Rok vydania</label>
+            <input type="number" min="0" max="2026" name="rok_vydania">
+
+            <label for="stav">Stav</label>
+
+            <label for="">1</label>
+            <input type="radio" name="stav" value="1">
+
+            <label for="">0</label>
+            <input type="radio" name="stav" value="0">
+
+            <input type="hidden" name="action" value="create">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
     <br>
     <table border="1">
         <tr>
@@ -79,10 +142,19 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
                 <td>
                     <form action="index.php" method="POST">
                         <input type="hidden" name="action" value="delete">
-                        <input type="hidden" name="kniha_id" value="<?php $kniha->getId();?>">
+                        <input type="hidden" name="kniha_id" value="<?= $kniha->getId();?>">
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
-                </td>                
+                     
+                </td>  
+                <td>
+                    <form action="update.php" method="POST">
+                        <input type="hidden" name="action" value="update">
+                        <input type="hidden" name="kniha_id" value="<?= $kniha->getId();?>">
+                        <button type="submit" class="btn btn-success">Update</button>                           
+                    </form>
+                </td>
+            
             </tr>
         <?php endforeach; ?>
     </table>
