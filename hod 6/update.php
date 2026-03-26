@@ -33,18 +33,23 @@ print_r($row);
 </head>
 <body>
     <form action="index.php" method="POST">
+
         <label for="">Nazov</label>
-        <input type="text" name="nazov" value=<?= $row["nazov"] ?>>
+        <input type="text" name="nazov" value="<?= $row["nazov"] ?>">
+
         <label for="">Autor</label>
-        <input type="text" name="autor" value=<?= $row["autor"] ?>>
+        <input type="text" name="autor" value="<?= $row["autor"] ?>">
+
         <label for="">Rok vydania</label>
-        <input type="number" min="0" max="2030" name="rok_vydania" value=<?= $row["rok_vydania"] ?>>
+        <input type="number" min="0" max="2030" name="rok_vydania" value="<?= $row["rok_vydania"] ?>">
+
         <label for="">Stav</label>
-        <input type="text" name="stav" value=<?= $row["stav"] ?>>
+        <input type="text" name="stav" value="<?= $row["stav"] ?>">
 
         <input type="hidden" name="action" value="update">
         <input type="hidden" name="kniha_id" value="<?= $row["id"]?>">
         <button type="submit" class="btn btn-success">Update</button>
+        
     </form>
 </body>
 </html>

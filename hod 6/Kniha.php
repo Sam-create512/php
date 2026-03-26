@@ -38,4 +38,8 @@ class Kniha
     public function getStav(){
         return $this->stav;
     }
+
+    public function setStav($stav){
+        $this->stav = $stav;
+    }
 }

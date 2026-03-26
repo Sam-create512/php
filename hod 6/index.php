@@ -6,7 +6,6 @@ include "Database.php";
 $spojenie = new Database();
 $db = $spojenie->nadviazSpojenie();
 
-print_r($_POST);
 if(!$db){
     die(" Databaza nie je pripojena");
 }
@@ -30,9 +29,6 @@ if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"])){
         $sql = "INSERT INTO knihy(nazov,autor,rok_vydania,stav) VALUES(:nazov,:autor,:rok_vydania,:stav)";
         $stmt = $db->prepare($sql);
 
-
-        // $stmt = $db->prepare($sql);
-        // var_dump($stmt);
         $stmt->execute([
              ":nazov" => $_POST["nazov"],
              ":autor" => $_POST["autor"],
@@ -43,11 +39,8 @@ if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"])){
         header("Location:index.php");
         exit();        
     }
-    // elseif($_POST["action"] === "update"){
-    //     header("Location:update.php");
-    //     exit(); 
-    // }
-    if($_POST["action"] === "update"){
+
+    elseif($_POST["action"] === "update"){
         $sql = "UPDATE knihy SET nazov=:nazov,autor=:autor,rok_vydania=:rok_vydania,stav=:stav WHERE id=:id";
 
         $stmt = $db->prepare($sql);
@@ -61,12 +54,33 @@ if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"])){
 
         ]);        
     }
+
+    elseif($_POST["action"] === "stav0"){
+        $sql = "UPDATE knihy SET stav=:stav WHERE id=:id";
+
+        $stmt = $db->prepare($sql);
+    
+        $stmt->execute([
+            "stav" => 0,
+            ":id" => $_POST["kniha_id"]
+
+        ]);
+    }
+    elseif($_POST["action"] === "stav1"){
+        $sql = "UPDATE knihy SET stav=:stav WHERE id=:id";
+
+        $stmt = $db->prepare($sql);
+    
+        $stmt->execute([
+            "stav" => 1,
+            ":id" => $_POST["kniha_id"]
+
+        ]);
+    }
 }
 
 $sql = "SELECT * FROM knihy";
 $stmt = $db->query($sql);
-
-
 
 
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
@@ -124,39 +138,63 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             <th>Stav</th>
             <th>Action</th>
         </tr>
-
-        <?php foreach($kniznica as $kniha):?>
-            <tr>
-                <td>
-                    <?= $kniha->getNazov() ?>
-                </td>
-                <td>
-                    <?= $kniha->getAutor() ?>
-                </td>
-                <td>
-                    <?= $kniha->getRok_vydania() ?>
-                </td>
-                <td>
-                    <?= $kniha->getStav() ?>
-                </td>
-                <td>
-                    <form action="index.php" method="POST">
-                        <input type="hidden" name="action" value="delete">
-                        <input type="hidden" name="kniha_id" value="<?= $kniha->getId();?>">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                     
-                </td>  
-                <td>
-                    <form action="update.php" method="POST">
-                        <input type="hidden" name="action" value="update">
-                        <input type="hidden" name="kniha_id" value="<?= $kniha->getId();?>">
-                        <button type="submit" class="btn btn-success">Update</button>                           
-                    </form>
-                </td>
+            <?php if(isset($kniznica)):
+            foreach($kniznica as $kniha):?>
+                <tr>
+                    <td>
+                        <?= $kniha->getNazov() ?>
+                    </td>
+                    <td>
+                        <?= $kniha->getAutor() ?>
+                    </td>
+                    <td>
+                        <?= $kniha->getRok_vydania() ?>
+                    </td>
+                    <td>
+                        <?php if($kniha->getStav() === 1): ?>
+                            <form action="index.php" method="POST">
+                                <input type="hidden" name="action" value="stav0">
+                                <input type="hidden" name="kniha_id" value="<?= $kniha->getId();?>">
+                                <button type="submit" class="btn btn-success">Vypozicat</button>
+                            </form>
+                        <?php 
+                        elseif($kniha->getStav() === 0): ?>
+                            <form action="index.php" method="POST">
+                                <input type="hidden" name="action" value="stav1">
+                                <input type="hidden" name="kniha_id" value="<?= $kniha->getId();?>">
+                                <button type="submit" class="btn btn-secondary">Vratit</button>
+                            </form>
+                        <?php 
+                        else: ?>
+                            Chyba v databaze    
+                        <?php endif; ?>
+                        
+                    </td>
+                    <td>
+                        <form action="index.php" method="POST">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="kniha_id" value="<?= $kniha->getId();?>">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                        
+                    </td>  
+                    <td>
+                        <form action="update.php" method="POST">
+                            <input type="hidden" name="action" value="update">
+                            <input type="hidden" name="kniha_id" value="<?= $kniha->getId();?>">
+                            <button type="submit" class="btn btn-info">Update</button>                           
+                        </form>
+                    </td>
+                
+                </tr>
+            <?php endforeach;               
             
-            </tr>
-        <?php endforeach; ?>
+            else: ?>
+              <tr>
+                <td colspan="6">Databaza je prazdna</td>
+              </tr>  
+            <?php endif; ?>   
+                
     </table>
 </body>
 </html>
