@@ -20,7 +20,7 @@ $stmt->execute([
 
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-print_r($row);  
+ 
 ?>
 
 <!DOCTYPE html>

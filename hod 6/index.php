@@ -14,30 +14,43 @@ if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"])){
     if($_POST["action"] === "delete"){
 
     
-    $sql = "DELETE FROM knihy WHERE id = :id";
+        $sql = "DELETE FROM knihy WHERE id = :id";
 
-    $stmt = $db->prepare($sql);
+        $stmt = $db->prepare($sql);
 
-    $stmt->execute([
-        ":id" => $_POST["kniha_id"]
-    ]);
+        $odoslanie = $stmt->execute([
+            ":id" => $_POST["kniha_id"]
+        ]);
+        if($odoslanie){
+            $_GET["success"] = "SUCCESS";
+        }
+        else{
+            $_GET["error"] = "ERROR";
+        } 
 
-    header("Location:index.php");
-    exit();
     }
+    
     elseif($_POST["action"] === "create"){
         $sql = "INSERT INTO knihy(nazov,autor,rok_vydania,stav) VALUES(:nazov,:autor,:rok_vydania,:stav)";
         $stmt = $db->prepare($sql);
+        if(mb_strlen($_POST["nazov"]) !== 0 && mb_strlen($_POST["autor"]) !== 0 && $_POST["rok_vydania"] != 0  && isset($_POST["stav"])){
+            $odoslanie = $stmt->execute([
+                ":nazov" => $_POST["nazov"],
+                ":autor" => $_POST["autor"],
+                ":rok_vydania" => $_POST["rok_vydania"],
+                ":stav" => $_POST["stav"]
+            ]);print_r($_POST);
+            if($odoslanie){
+                $_GET["success"] = "SUCCESS";
+                
+            }
+        }
+            else{
+                $_GET["error"] = "ERROR";
+            }
 
-        $stmt->execute([
-             ":nazov" => $_POST["nazov"],
-             ":autor" => $_POST["autor"],
-             ":rok_vydania" => $_POST["rok_vydania"],
-             ":stav" => $_POST["stav"]
-            ]);
-    
-        header("Location:index.php");
-        exit();        
+
+
     }
 
     elseif($_POST["action"] === "update"){
@@ -45,14 +58,22 @@ if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"])){
 
         $stmt = $db->prepare($sql);
     
-        $stmt->execute([
+        $odoslanie = $stmt->execute([
             "nazov" => $_POST["nazov"],
             "autor" => $_POST["autor"],
             "rok_vydania" => $_POST["rok_vydania"],
             "stav" => $_POST["stav"],
             ":id" => $_POST["kniha_id"]
 
-        ]);        
+        ]);
+
+        if($odoslanie){
+            $_GET["success"] = "SUCCESS";
+        }
+        else{
+            $_GET["error"] = "ERROR";
+        }  
+
     }
 
     elseif($_POST["action"] === "stav0"){
@@ -60,22 +81,36 @@ if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"])){
 
         $stmt = $db->prepare($sql);
     
-        $stmt->execute([
+        $odoslanie = $stmt->execute([
             "stav" => 0,
             ":id" => $_POST["kniha_id"]
 
         ]);
+
+        if($odoslanie){
+            $_GET["success"] = "SUCCESS";
+        }
+        else{
+            $_GET["error"] = "ERROR";
+        } 
     }
+
     elseif($_POST["action"] === "stav1"){
         $sql = "UPDATE knihy SET stav=:stav WHERE id=:id";
 
         $stmt = $db->prepare($sql);
     
-        $stmt->execute([
+        $odoslanie = $stmt->execute([
             "stav" => 1,
             ":id" => $_POST["kniha_id"]
 
         ]);
+        if($odoslanie){
+            $_GET["success"] = "SUCCESS";
+        }
+        else{
+            $_GET["error"] = "ERROR";
+        } 
     }
 }
 
@@ -103,8 +138,20 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <title>Document</title>
+
 </head>
 <body>
+    <?php if(isset($_GET["error"])): ?>
+        <div class="alert alert-danger" role="alert">
+           <?= $_GET["error"]; ?>
+        </div>
+    <?php endif ?>
+    <?php print_r($_GET); if(isset($_GET["success"])): ?>
+        <div class="alert alert-primary" role="alert">
+           <?= $_GET["success"]; ?>
+        </div>
+    <?php endif ?>   
+
     <h1>Kniznica</h1>
     <br>                   
         <form action="index.php" method="POST">
@@ -116,7 +163,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             <input type="text" name="autor">
 
             <label for="rok_vydania">Rok vydania</label>
-            <input type="number" min="0" max="2026" name="rok_vydania">
+            <input type="number" min="1" max="2026" name="rok_vydania">
 
             <label for="stav">Stav</label>
 
