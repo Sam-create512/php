@@ -9,6 +9,7 @@ $db = $spojenie->nadviazSpojenie();
 if(!$db){
     die(" Databaza nie je pripojena");
 }
+
 if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"])){
 
     if($_POST["action"] === "delete"){
@@ -18,15 +19,15 @@ if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"])){
 
         $stmt = $db->prepare($sql);
 
-        $odoslanie = $stmt->execute([
+        $stmt->execute([
             ":id" => $_POST["kniha_id"]
         ]);
-        if($odoslanie){
+        if($stmt->rowCount() > 0){
             $_GET["success"] = "SUCCESS";
         }
         else{
             $_GET["error"] = "ERROR";
-        } 
+        }  
 
     }
     
@@ -39,15 +40,17 @@ if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"])){
                 ":autor" => $_POST["autor"],
                 ":rok_vydania" => $_POST["rok_vydania"],
                 ":stav" => $_POST["stav"]
-            ]);print_r($_POST);
-            if($odoslanie){
+            ]);
+            if($stmt->rowCount() > 0){
                 $_GET["success"] = "SUCCESS";
-                
             }
-        }
             else{
                 $_GET["error"] = "ERROR";
-            }
+            }  
+        }
+        else{
+            $_GET["error"] = "ERROR";
+        }
 
 
 
@@ -58,7 +61,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"])){
 
         $stmt = $db->prepare($sql);
     
-        $odoslanie = $stmt->execute([
+        $stmt->execute([
             "nazov" => $_POST["nazov"],
             "autor" => $_POST["autor"],
             "rok_vydania" => $_POST["rok_vydania"],
@@ -67,7 +70,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"])){
 
         ]);
 
-        if($odoslanie){
+        if($stmt->rowCount() > 0){
             $_GET["success"] = "SUCCESS";
         }
         else{
@@ -87,12 +90,12 @@ if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"])){
 
         ]);
 
-        if($odoslanie){
+        if($stmt->rowCount() > 0){
             $_GET["success"] = "SUCCESS";
         }
         else{
             $_GET["error"] = "ERROR";
-        } 
+        }  
     }
 
     elseif($_POST["action"] === "stav1"){
@@ -105,12 +108,12 @@ if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"])){
             ":id" => $_POST["kniha_id"]
 
         ]);
-        if($odoslanie){
+        if($stmt->rowCount() > 0){
             $_GET["success"] = "SUCCESS";
         }
         else{
             $_GET["error"] = "ERROR";
-        } 
+        }  
     }
 }
 
@@ -146,7 +149,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
            <?= $_GET["error"]; ?>
         </div>
     <?php endif ?>
-    <?php print_r($_GET); if(isset($_GET["success"])): ?>
+    <?php if(isset($_GET["success"])): ?>
         <div class="alert alert-primary" role="alert">
            <?= $_GET["success"]; ?>
         </div>
